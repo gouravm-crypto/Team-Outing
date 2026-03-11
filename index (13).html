@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Outing 2026 — Choose Your Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --t-dark: #0d2b1e; --t-mid: #1a5c3a; --t-lit: #2d9e63; --t-pale: #d4f5e2; --t-bg: #f0fdf6;
+  --c-dark: #3b1a00; --c-mid: #7c3d0a; --c-lit: #c4700a; --c-pale: #fef3d4; --c-bg: #fffbf0;
+  --k-dark: #0f1f40; --k-mid: #1e4080; --k-lit: #3b7dd8; --k-pale: #dbeafe; --k-bg: #f0f6ff;
+  --ink: #0a0a0a; --mist: #6b7280; --bone: #f9f7f4; --paper: #ffffff;
+  --ease: cubic-bezier(0.16,1,0.3,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bone);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom Cursor ─────────────────────────────────────── */
+#cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  pointer-events: none; mix-blend-mode: difference;
+}
+#cursor-dot {
+  width: 8px; height: 8px; background: white;
+  border-radius: 50%; position: absolute;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s var(--ease);
+}
+#cursor-ring {
+  width: 40px; height: 40px; border: 1.5px solid white;
+  border-radius: 50%; position: absolute;
+  transform: translate(-50%, -50%);
+  transition: transform 0.35s var(--ease), width 0.3s, height 0.3s, border-color 0.3s;
+}
+body.hovering #cursor-ring { width: 60px; height: 60px; }
+
+/* ── Noise overlay ─────────────────────────────────────── */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 1000;
+  pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Hero ──────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--ink);
+}
+
+#hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, #0d2b1e88, transparent),
+    radial-gradient(ellipse 60% 80% at 80% 30%, #3b1a0044, transparent),
+    radial-gradient(ellipse 50% 50% at 60% 80%, #0f1f4066, transparent),
+    #0a0a0a;
+}
+
+.hero-img {
+  position: absolute; inset: 0; opacity: 0.18;
+  background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600') center/cover;
+  mix-blend-mode: luminosity;
+}
+
+#hero-content {
+  position: relative; z-index: 2; text-align: center;
+  padding: 0 2rem;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em;
+  color: #ffffff66; text-transform: uppercase; margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem; justify-content: center;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; flex: 1; max-width: 60px; height: 1px; background: #ffffff33;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 900; line-height: 0.9;
+  color: white; margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-title em {
+  font-style: italic; color: #2d9e63;
+  display: block;
+}
+
+.hero-sub {
+  font-size: clamp(0.9rem, 2vw, 1.1rem); color: #ffffff88;
+  margin: 2rem auto; max-width: 480px; line-height: 1.7;
+  font-weight: 300;
+}
+
+.hero-pills {
+  display: flex; flex-wrap: wrap; gap: 0.75rem;
+  justify-content: center; margin: 2.5rem 0;
+}
+
+.pill {
+  padding: 0.5rem 1.25rem; border-radius: 100px;
+  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.02em;
+  border: 1px solid #ffffff22; color: #ffffffbb;
+  background: #ffffff0d; backdrop-filter: blur(10px);
+}
+
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: #ffffff44; font-size: 0.7rem; letter-spacing: 0.15em;
+  font-family: 'DM Mono', monospace; text-transform: uppercase;
+  animation: bounce 2s ease-in-out infinite;
+}
+.hero-scroll::after {
+  content: ''; width: 1px; height: 40px;
+  background: linear-gradient(to bottom, #ffffff66, transparent);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── Nav ───────────────────────────────────────────────── */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 1.25rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.4s var(--ease);
+}
+#nav.scrolled {
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(20px);
+  padding: 0.85rem 2.5rem;
+  border-bottom: 1px solid #ffffff0f;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  color: white; font-weight: 700; letter-spacing: -0.01em;
+}
+.nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+.nav-links a {
+  color: #ffffff88; text-decoration: none; font-size: 0.82rem;
+  font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s;
+}
+.nav-links a:hover { color: white; }
+
+.nav-vote {
+  padding: 0.5rem 1.25rem; border-radius: 100px;
+  background: white; color: var(--ink);
+  font-size: 0.8rem; font-weight: 600; border: none;
+  cursor: pointer; transition: all 0.2s;
+}
+.nav-vote:hover { background: var(--t-lit); color: white; }
+
+/* ── Destination tabs ──────────────────────────────────── */
+#destinations {
+  background: var(--bone);
+}
+
+.dest-nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; background: var(--ink);
+  border-bottom: 1px solid #ffffff0f;
+}
+
+.dest-tab {
+  flex: 1; padding: 1.25rem 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  cursor: pointer; border: none; background: transparent;
+  transition: all 0.3s var(--ease); position: relative;
+  overflow: hidden;
+}
+.dest-tab::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--accent, white);
+  transform: scaleX(0); transition: transform 0.3s var(--ease);
+}
+.dest-tab.active::after { transform: scaleX(1); }
+.dest-tab.active { background: #ffffff0d; }
+
+.dest-tab-label {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem;
+  font-weight: 700; color: #ffffff99;
+  transition: color 0.3s;
+}
+.dest-tab.active .dest-tab-label { color: white; }
+.dest-tab-meta {
+  font-size: 0.68rem; color: #ffffff44;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+}
+.dest-tab-temp {
+  font-size: 0.75rem; font-weight: 600;
+}
+
+/* ── Destination panels ────────────────────────────────── */
+.dest-panel { display: none; }
+.dest-panel.active { display: block; }
+
+/* ── Destination Hero ──────────────────────────────────── */
+.dest-hero {
+  height: 70vh; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+
+.dest-hero-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 8s ease; transform: scale(1.05);
+}
+.dest-hero:hover .dest-hero-img { transform: scale(1); }
+
+.dest-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, #000000ee 0%, #00000044 50%, transparent 100%);
+}
+
+.dest-hero-content {
+  position: relative; z-index: 2; padding: 3rem 4rem;
+  width: 100%;
+}
+
+.dest-badge {
+  display: inline-block; padding: 0.35rem 1rem;
+  border-radius: 100px; font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.dest-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900; color: white; line-height: 0.95;
+  letter-spacing: -0.02em; margin-bottom: 0.75rem;
+}
+
+.dest-hero-sub {
+  color: #ffffffaa; font-size: 1rem; font-weight: 300;
+  max-width: 500px; line-height: 1.6;
+}
+
+.dest-stats-bar {
+  display: flex; gap: 0; margin-top: 2rem;
+  background: #ffffff0f; backdrop-filter: blur(20px);
+  border: 1px solid #ffffff18; border-radius: 16px;
+  overflow: hidden; width: fit-content;
+}
+.dest-stat {
+  padding: 1rem 1.75rem; text-align: center;
+  border-right: 1px solid #ffffff15;
+}
+.dest-stat:last-child { border-right: none; }
+.dest-stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 700; color: white;
+  line-height: 1;
+}
+.dest-stat-label {
+  font-size: 0.65rem; color: #ffffff66; text-transform: uppercase;
+  letter-spacing: 0.12em; margin-top: 0.3rem;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── Section layout ────────────────────────────────────── */
+.section { padding: 5rem 4rem; max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif; font-size: 2.5rem;
+  font-weight: 700; line-height: 1.1; margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.section-intro {
+  color: var(--mist); font-size: 1rem; line-height: 1.7;
+  max-width: 600px; font-weight: 300;
+}
+
+/* ── Activities Grid ───────────────────────────────────── */
+.activities-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem; margin-top: 3rem;
+}
+
+.activity-card {
+  border-radius: 20px; overflow: hidden; cursor: pointer;
+  position: relative; aspect-ratio: 4/3;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  text-decoration: none;
+}
+.activity-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px #00000033;
+}
+
+.activity-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.activity-card:hover .activity-img { transform: scale(1.08); }
+
+.activity-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, #000000cc 0%, transparent 55%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 1.5rem;
+}
+
+.activity-icon {
+  font-size: 1.75rem; margin-bottom: 0.5rem;
+}
+
+.activity-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700; color: white;
+  line-height: 1.2; margin-bottom: 0.25rem;
+}
+
+.activity-desc {
+  font-size: 0.78rem; color: #ffffffaa;
+  line-height: 1.4; font-weight: 300;
+}
+
+.activity-cta {
+  position: absolute; top: 1rem; right: 1rem;
+  background: #ffffff18; backdrop-filter: blur(10px);
+  border: 1px solid #ffffff33; border-radius: 100px;
+  padding: 0.35rem 0.85rem; font-size: 0.68rem;
+  color: white; font-weight: 600; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(-4px);
+  transition: all 0.3s var(--ease);
+}
+.activity-card:hover .activity-cta { opacity: 1; transform: translateY(0); }
+
+/* ── Itinerary ─────────────────────────────────────────── */
+.itinerary-section { padding: 0 4rem 5rem; max-width: 1200px; margin: 0 auto; }
+
+.day-block { margin-bottom: 3rem; }
+.day-title {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.day-title::after {
+  content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.2;
+}
+
+.timeline { position: relative; }
+.timeline::before {
+  content: ''; position: absolute; left: 68px; top: 0; bottom: 0;
+  width: 1px; background: linear-gradient(to bottom, var(--accent), transparent);
+  opacity: 0.2;
+}
+
+.tl-row {
+  display: flex; gap: 0; margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.tl-row:hover { transform: translateX(4px); }
+
+.tl-time {
+  width: 68px; padding: 0.85rem 1rem 0.85rem 0;
+  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  color: var(--accent); font-weight: 500; text-align: right;
+  flex-shrink: 0; padding-top: 1rem;
+}
+
+.tl-dot {
+  width: 20px; position: relative; flex-shrink: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 1.05rem;
+}
+.tl-dot::before {
+  content: ''; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--accent);
+  opacity: 0.6; flex-shrink: 0; margin-top: 2px;
+}
+
+.tl-content {
+  flex: 1; padding: 0.85rem 1rem;
+  border-radius: 12px; margin-left: 0.5rem;
+  transition: background 0.2s;
+}
+.tl-row:hover .tl-content { background: #00000006; }
+
+.tl-act {
+  font-weight: 600; font-size: 0.92rem; line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+.tl-note {
+  font-size: 0.78rem; color: var(--mist);
+  font-weight: 300; line-height: 1.4;
+}
+
+/* ── Budget ────────────────────────────────────────────── */
+.budget-section { padding: 0 4rem 5rem; max-width: 1200px; margin: 0 auto; }
+
+.budget-card {
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid #00000010;
+}
+
+.budget-header {
+  display: grid; grid-template-columns: 1fr 1fr 100px 120px;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; font-family: 'DM Mono', monospace;
+  background: var(--accent); color: white;
+}
+.budget-row {
+  display: grid; grid-template-columns: 1fr 1fr 100px 120px;
+  padding: 1rem 1.5rem; align-items: center;
+  border-bottom: 1px solid #00000008;
+  transition: background 0.15s;
+}
+.budget-row:hover { background: #00000005; }
+.budget-row:nth-child(even) { background: #00000004; }
+.budget-row.total {
+  background: var(--accent) !important; color: white;
+  font-weight: 700;
+}
+.budget-row.total .b-sub { color: #ffffffbb; }
+.b-cat { font-weight: 600; font-size: 0.9rem; }
+.b-sub { font-size: 0.78rem; color: var(--mist); }
+.b-total { font-weight: 700; font-size: 0.95rem; text-align: right; }
+.b-pp { font-size: 0.82rem; text-align: right; font-family: 'DM Mono', monospace; }
+
+/* ── Resort Card ───────────────────────────────────────── */
+.resort-section { padding: 0 4rem 5rem; max-width: 1200px; margin: 0 auto; }
+
+.resort-card {
+  border-radius: 24px; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr;
+  border: 1px solid #00000010;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.resort-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px #00000018;
+}
+
+.resort-img-wrap {
+  position: relative; overflow: hidden; min-height: 280px;
+}
+.resort-img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.resort-card:hover .resort-img { transform: scale(1.05); }
+
+.resort-info {
+  padding: 2.5rem; display: flex; flex-direction: column;
+  justify-content: space-between; background: white;
+}
+
+.resort-tag {
+  font-family: 'DM Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.resort-name {
+  font-family: 'Playfair Display', serif; font-size: 1.6rem;
+  font-weight: 700; line-height: 1.2; margin-bottom: 0.75rem;
+}
+.resort-rating {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.stars { color: #f59e0b; font-size: 0.9rem; }
+.rating-text { font-size: 0.82rem; color: var(--mist); }
+
+.resort-amenities {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+}
+.amenity-tag {
+  padding: 0.3rem 0.75rem; border-radius: 100px;
+  font-size: 0.72rem; font-weight: 500;
+  background: var(--accent-pale); color: var(--accent-dark);
+  border: 1px solid var(--accent-border);
+}
+
+.resort-phone {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'DM Mono', monospace; font-size: 0.85rem;
+  font-weight: 600; color: var(--accent);
+}
+
+.resort-tip {
+  font-size: 0.78rem; color: var(--mist); line-height: 1.6;
+  padding: 0.75rem 1rem; border-radius: 10px;
+  background: var(--accent-pale); border-left: 3px solid var(--accent);
+  margin-top: 1rem;
+}
+
+/* ── Compare Section ───────────────────────────────────── */
+#compare {
+  background: var(--ink); padding: 6rem 4rem;
+}
+
+.compare-header {
+  text-align: center; margin-bottom: 4rem;
+}
+.compare-header .section-label { color: #ffffff55; }
+.compare-header .section-title { color: white; }
+.compare-header .section-intro { color: #ffffff66; margin: 0 auto; }
+
+.compare-table-wrap { overflow-x: auto; }
+.compare-table {
+  width: 100%; border-collapse: collapse;
+  max-width: 960px; margin: 0 auto;
+}
+
+.compare-table th {
+  padding: 1.25rem 1.5rem; text-align: left;
+  font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  border-bottom: 1px solid #ffffff15; color: #ffffff66;
+}
+.compare-table th:not(:first-child) { text-align: center; }
+
+.compare-table td {
+  padding: 0.9rem 1.5rem; font-size: 0.88rem;
+  border-bottom: 1px solid #ffffff08;
+  color: #ffffffcc; transition: background 0.15s;
+}
+.compare-table tr:hover td { background: #ffffff05; }
+.compare-table td:not(:first-child) { text-align: center; }
+.compare-table td:first-child { color: #ffffff88; font-size: 0.82rem; }
+
+.winner-cell {
+  background: #ffffff0f; border-radius: 8px;
+  color: white !important; font-weight: 600;
+}
+
+.compare-table tr.highlight td:first-child { color: white; font-weight: 600; }
+.compare-table tr.total-row td {
+  font-weight: 700; font-size: 1rem;
+  border-top: 1px solid #ffffff22;
+  padding-top: 1.25rem;
+}
+
+.trophy { font-size: 0.9rem; }
+
+/* ── Winner cards ──────────────────────────────────────── */
+.winner-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; max-width: 960px; margin: 4rem auto 0;
+}
+
+.winner-card {
+  border-radius: 20px; padding: 2rem;
+  border: 1px solid #ffffff15; position: relative;
+  overflow: hidden; transition: transform 0.3s var(--ease);
+}
+.winner-card:hover { transform: translateY(-6px); }
+.winner-card.featured {
+  border-color: #2d9e6344;
+  background: linear-gradient(135deg, #0d2b1e, #1a5c3a22);
+}
+.winner-card::before {
+  content: ''; position: absolute; top: -40px; right: -40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--card-glow, #ffffff08);
+}
+
+.winner-badge {
+  font-size: 2rem; margin-bottom: 1rem;
+}
+.winner-dest {
+  font-family: 'Playfair Display', serif; font-size: 1.35rem;
+  font-weight: 700; color: white; margin-bottom: 0.25rem;
+}
+.winner-tagline {
+  font-size: 0.75rem; color: #ffffff55; margin-bottom: 1rem;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.winner-desc {
+  font-size: 0.82rem; color: #ffffff88; line-height: 1.6; font-weight: 300;
+}
+
+/* ── Vote Section ──────────────────────────────────────── */
+#vote {
+  padding: 6rem 4rem; background: var(--bone);
+  text-align: center;
+}
+
+#vote .section-label { color: var(--t-lit); }
+#vote .section-title { font-size: 3rem; margin-bottom: 0.75rem; }
+#vote .section-intro { margin: 0 auto 3rem; }
+
+.vote-options {
+  display: flex; gap: 1.5rem; justify-content: center;
+  flex-wrap: wrap; max-width: 800px; margin: 0 auto;
+}
+
+.vote-btn {
+  flex: 1; min-width: 220px; padding: 2rem 1.5rem;
+  border-radius: 20px; border: 2px solid transparent;
+  background: white; cursor: pointer; text-align: center;
+  transition: all 0.3s var(--ease);
+  box-shadow: 0 4px 20px #00000010;
+}
+.vote-btn:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px #00000018;
+}
+.vote-btn.selected {
+  border-color: var(--btn-accent);
+  box-shadow: 0 0 0 4px var(--btn-glow), 0 20px 40px #00000020;
+}
+.vote-btn.thekkady { --btn-accent: var(--t-lit); --btn-glow: #2d9e6322; }
+.vote-btn.coorg    { --btn-accent: var(--c-lit); --btn-glow: #c4700a22; }
+.vote-btn.chik     { --btn-accent: var(--k-lit); --btn-glow: #3b7dd822; }
+
+.vote-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.vote-name {
+  font-family: 'Playfair Display', serif; font-size: 1.3rem;
+  font-weight: 700; margin-bottom: 0.25rem;
+}
+.vote-sub { font-size: 0.8rem; color: var(--mist); margin-bottom: 1rem; }
+.vote-budget {
+  font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 600;
+}
+
+.vote-result {
+  margin-top: 2.5rem; padding: 1.5rem 2.5rem;
+  background: var(--ink); color: white; border-radius: 16px;
+  display: none; max-width: 500px; margin: 2rem auto 0;
+}
+.vote-result.show { display: block; animation: popIn 0.5s var(--ease); }
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.vote-result-title {
+  font-family: 'Playfair Display', serif; font-size: 1.4rem;
+  font-weight: 700; margin-bottom: 0.5rem;
+}
+.vote-result-sub { font-size: 0.85rem; color: #ffffff88; }
+
+/* ── Footer ────────────────────────────────────────────── */
+footer {
+  background: var(--ink); padding: 3rem 4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid #ffffff0f;
+}
+.footer-left { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: white; }
+.footer-right { font-size: 0.78rem; color: #ffffff44; font-family: 'DM Mono', monospace; }
+
+/* ── Destination theming ───────────────────────────────── */
+.panel-thekkady {
+  --accent: var(--t-mid); --accent-pale: var(--t-bg);
+  --accent-dark: var(--t-dark); --accent-border: var(--t-pale);
+}
+.panel-coorg {
+  --accent: var(--c-mid); --accent-pale: var(--c-bg);
+  --accent-dark: var(--c-dark); --accent-border: var(--c-pale);
+}
+.panel-chik {
+  --accent: var(--k-mid); --accent-pale: var(--k-bg);
+  --accent-dark: var(--k-dark); --accent-border: var(--k-pale);
+}
+
+/* ── Scroll animations ─────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── Mobile ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .activities-grid { grid-template-columns: 1fr 1fr; }
+  .resort-card { grid-template-columns: 1fr; }
+  .winner-cards { grid-template-columns: 1fr; }
+  .section, .itinerary-section, .budget-section, .resort-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .dest-hero-content { padding: 2rem; }
+  .dest-hero-title { font-size: 2.5rem; }
+  #nav .nav-links { display: none; }
+  .budget-header, .budget-row { grid-template-columns: 1fr 1fr; }
+  .budget-header span:nth-child(3), .budget-header span:nth-child(4),
+  .budget-row .b-sub, .budget-row .b-pp { display: none; }
+  .compare-table td, .compare-table th { padding: 0.7rem 0.75rem; font-size: 0.78rem; }
+  #vote, #compare { padding: 4rem 1.5rem; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor">
+  <div id="cursor-ring"></div>
+  <div id="cursor-dot"></div>
+</div>
+
+<!-- Nav -->
+<nav id="nav">
+  <div class="nav-logo">Outing '26</div>
+  <ul class="nav-links">
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#compare">Compare</a></li>
+    <li><a href="#vote">Vote</a></li>
+  </ul>
+  <button class="nav-vote" onclick="document.getElementById('vote').scrollIntoView({behavior:'smooth'})">Cast Your Vote</button>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div class="hero-img"></div>
+  <div id="hero-content">
+    <div class="hero-eyebrow">Team Outing 2026 · Mar 28–29 · 20 People</div>
+    <h1 class="hero-title">
+      Choose Your
+      <em>Adventure.</em>
+    </h1>
+    <p class="hero-sub">Three incredible destinations. One unforgettable weekend. Pure veg, pure vibes, pure memories.</p>
+    <div class="hero-pills">
+      <span class="pill">🌿 Thekkady — Wildlife & Culture</span>
+      <span class="pill">☕ Coorg — Coffee & Adventure</span>
+      <span class="pill">🏔️ Chikmagalur — Peaks & Trails</span>
+    </div>
+    <div class="hero-pills">
+      <span class="pill">Rs.5,000 budget</span>
+      <span class="pill">21-seater AC bus</span>
+      <span class="pill">Veg only</span>
+      <span class="pill">~7–8 hrs from Chennai</span>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<!-- Destinations -->
+<section id="destinations">
+  <div class="dest-nav">
+    <button class="dest-tab active" data-panel="thekkady" style="--accent: var(--t-lit);" onclick="switchPanel('thekkady', this)">
+      <span class="dest-tab-label">Thekkady</span>
+      <span class="dest-tab-meta">Kerala · 490 km</span>
+    </button>
+    <button class="dest-tab" data-panel="coorg" style="--accent: var(--c-lit);" onclick="switchPanel('coorg', this)">
+      <span class="dest-tab-label">Coorg</span>
+      <span class="dest-tab-meta">Karnataka · 470 km</span>
+    </button>
+    <button class="dest-tab" data-panel="chikmagalur" style="--accent: var(--k-lit);" onclick="switchPanel('chikmagalur', this)">
+      <span class="dest-tab-label">Chikmagalur</span>
+      <span class="dest-tab-meta">Karnataka · 430 km</span>
+    </button>
+  </div>
+
+  <!-- ── THEKKADY ─────────────────────────────────── -->
+  <div id="panel-thekkady" class="dest-panel panel-thekkady active">
+    <div class="dest-hero">
+      <div class="dest-hero-img" style="background-image: url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1600')"></div>
+      <div class="dest-hero-overlay"></div>
+      <div class="dest-hero-content">
+        <div class="dest-badge" style="background:#2d9e6322; color:#2d9e63; border:1px solid #2d9e6344;">OPTION A</div>
+        <h2 class="dest-hero-title">Thekkady</h2>
+        <p class="dest-hero-sub">Periyar Wildlife Reserve, spice-scented hills & ancient cultural arts of Kerala.</p>
+        <div class="dest-stats-bar">
+          <div class="dest-stat"><div class="dest-stat-val">27°C</div><div class="dest-stat-label">Temperature</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">~8 hrs</div><div class="dest-stat-label">Drive time</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">490 km</div><div class="dest-stat-label">Distance</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">Rs.4,800</div><div class="dest-stat-label">Per person</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">★★★★★</div><div class="dest-stat-label">Culture</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label reveal">Sights & Activities</div>
+      <h3 class="section-title reveal reveal-delay-1">6 Experiences You Won't Forget</h3>
+      <p class="section-intro reveal reveal-delay-2">Click any activity to explore it on Google — see real photos, videos & reviews.</p>
+
+      <div class="activities-grid reveal reveal-delay-3">
+        <a class="activity-card" href="https://www.google.com/search?q=Periyar+Lake+Boat+Safari+Thekkady" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600" alt="Boat Safari" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🚤</div>
+            <div class="activity-name">Periyar Lake Boat Safari</div>
+            <div class="activity-desc">Spot wild elephants, deer & bison at dawn on the misty lake</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Bamboo+Rafting+Thekkady+Periyar" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=600" alt="Bamboo Rafting" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🎋</div>
+            <div class="activity-name">Bamboo Rafting</div>
+            <div class="activity-desc">Guided jungle rafting through Periyar Reserve — totally unique</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Spice+Plantation+Tour+Thekkady+Kumily" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600" alt="Spice Plantation" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🌶️</div>
+            <div class="activity-name">Spice Plantation Walk</div>
+            <div class="activity-desc">Cardamom, pepper, vanilla & cloves — guided tasting tour</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Kathakali+show+Kumily+Thekkady" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600" alt="Kathakali" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🎭</div>
+            <div class="activity-name">Kathakali & Kalaripayattu</div>
+            <div class="activity-desc">Classical Kerala performance art — 90 min evening show</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Periyar+jungle+trekking+Thekkady" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600" alt="Jungle Trek" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🥾</div>
+            <div class="activity-name">Jungle Trekking</div>
+            <div class="activity-desc">Forest trails with expert wildlife guides inside the reserve</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Elephant+Junction+Thekkady+interaction" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1521651201144-634f700b36ef?w=600" alt="Elephant" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🐘</div>
+            <div class="activity-name">Elephant Interaction</div>
+            <div class="activity-desc">Feed, bathe & bond with rescued elephants up close</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Itinerary -->
+    <div class="itinerary-section">
+      <div class="section-label reveal">Full Itinerary</div>
+      <h3 class="section-title reveal reveal-delay-1">Your 2-Day Plan</h3>
+
+      <div class="day-block reveal" style="margin-top:2rem;">
+        <div class="day-title" style="--accent: var(--t-mid);">Friday Night — Departure</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">9:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Board 21-seater AC bus from Chennai</div><div class="tl-note">Pack dinner — snacks provided. No stop needed till Dindigul.</div></div></div>
+          <div class="tl-row"><div class="tl-time">~1:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Rest stop — Dindigul / Theni</div><div class="tl-note">30 min break — restrooms, chai, stretch.</div></div></div>
+          <div class="tl-row"><div class="tl-time">5:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Arrive Thekkady — Check in & Rest</div><div class="tl-note">Early check-in pre-arranged with resort.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--t-mid);">Saturday, Mar 28 — Wildlife & Culture Day</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast at resort</div><div class="tl-note">Kerala-style full veg breakfast.</div></div></div>
+          <div class="tl-row"><div class="tl-time">8:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Periyar Lake Boat Safari (2 hrs)</div><div class="tl-note">Best at dawn — highest wildlife activity. Book KTDC boat in advance.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Spice Plantation Walk</div><div class="tl-note">Guided tour — cardamom, pepper, vanilla, cinnamon tasting included.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Lunch — Kerala veg thali</div><div class="tl-note">Resort or Saravana Bhavan Kumily.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Resort rest + pool time</div><div class="tl-note">Avoid outdoor heat 1–3 PM. Pool, games, chill.</div></div></div>
+          <div class="tl-row"><div class="tl-time">4:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Bamboo Rafting — Periyar Jungle</div><div class="tl-note">Pre-book through Kerala Forest Dept. Thrilling & completely unique.</div></div></div>
+          <div class="tl-row"><div class="tl-time">7:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Kathakali & Kalaripayattu Show</div><div class="tl-note">Mudra Cultural Centre, Kumily — 90 min show. Must-see!</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Dinner + Bonfire at resort</div><div class="tl-note">Music, indoor games, team bonding, stargazing.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--t-mid);">Sunday, Mar 29 — Nature & Return</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast + Morning Nature Walk</div><div class="tl-note">Guided birding walk in resort grounds.</div></div></div>
+          <div class="tl-row"><div class="tl-time">8:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Elephant Interaction Camp</div><div class="tl-note">Elephant Junction or Greenix Village — feed, bathe, bond.</div></div></div>
+          <div class="tl-row"><div class="tl-time">10:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Guided Jungle Trek (2 hrs)</div><div class="tl-note">Forest dept guide — flat to moderate trail inside reserve.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Checkout + Lunch in Kumily</div><div class="tl-note">Spice Garden or Hotel Ambadi — pure veg.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Spice Market + Shopping</div><div class="tl-note">Take home cardamom, pepper, vanilla. Budget: ~Rs.200–500 each.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Depart for Chennai</div><div class="tl-note">Home by ~11:00 PM — highway is smooth.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="budget-section">
+      <div class="section-label reveal">Budget</div>
+      <h3 class="section-title reveal reveal-delay-1">Detailed Cost Breakdown</h3>
+      <div class="budget-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="budget-header" style="background: var(--t-mid);">
+          <span>Category</span><span>Details</span><span>Total</span><span>Per Person</span>
+        </div>
+        <div class="budget-row"><div><div class="b-cat">Transport</div><div class="b-sub">21-seater AC bus, Chennai–Thekkady return</div></div><div class="b-sub">Overnight + return day travel</div><div class="b-total">Rs. 28,000</div><div class="b-pp">Rs. 1,400</div></div>
+        <div class="budget-row"><div><div class="b-cat">Accommodation</div><div class="b-sub">Nature resort — 6 rooms × Rs.3,500 × 2 nights</div></div><div class="b-sub">All rooms, early check-in</div><div class="b-total">Rs. 42,000</div><div class="b-pp">Rs. 2,100</div></div>
+        <div class="budget-row"><div><div class="b-cat">Food</div><div class="b-sub">All veg — Sat 3 meals + Sun 2 meals</div></div><div class="b-sub">Resort + town restaurants</div><div class="b-total">Rs. 18,000</div><div class="b-pp">Rs. 900</div></div>
+        <div class="budget-row"><div><div class="b-cat">Activities</div><div class="b-sub">Boat + Bamboo Raft + Kathakali + Elephant</div></div><div class="b-sub">All pre-booked group rates</div><div class="b-total">Rs. 6,000</div><div class="b-pp">Rs. 300</div></div>
+        <div class="budget-row"><div><div class="b-cat">Buffer</div><div class="b-sub">Tips, contingency, local transport</div></div><div class="b-sub">~10% buffer</div><div class="b-total">Rs. 2,000</div><div class="b-pp">Rs. 100</div></div>
+        <div class="budget-row total"><div><div class="b-cat">GRAND TOTAL</div><div class="b-sub" style="color:#ffffffbb;">For 20 people · Within Rs.5,000/person</div></div><div></div><div class="b-total">Rs. 96,000</div><div class="b-pp" style="font-size:1rem;font-weight:800;">Rs. 4,800</div></div>
+      </div>
+    </div>
+
+    <!-- Resort -->
+    <div class="resort-section">
+      <div class="section-label reveal">Where to Stay</div>
+      <h3 class="section-title reveal reveal-delay-1">Recommended Resort</h3>
+      <div class="resort-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="resort-img-wrap">
+          <img class="resort-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800" alt="Spice Village Resort" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'">
+        </div>
+        <div class="resort-info">
+          <div>
+            <div class="resort-tag">Recommended Resort</div>
+            <div class="resort-name">Spice Village by CGH Earth</div>
+            <div class="resort-rating">
+              <span class="stars">★★★★½</span>
+              <span class="rating-text">4.5 · 2,000+ reviews · Kumily, Thekkady</span>
+            </div>
+            <div class="resort-amenities">
+              <span class="amenity-tag" style="background:var(--t-bg);color:var(--t-dark);border-color:var(--t-pale);">🏊 Pool</span>
+              <span class="amenity-tag" style="background:var(--t-bg);color:var(--t-dark);border-color:var(--t-pale);">🌿 Nature Walks</span>
+              <span class="amenity-tag" style="background:var(--t-bg);color:var(--t-dark);border-color:var(--t-pale);">🍽️ Veg Restaurant</span>
+              <span class="amenity-tag" style="background:var(--t-bg);color:var(--t-dark);border-color:var(--t-pale);">🌺 Spa</span>
+              <span class="amenity-tag" style="background:var(--t-bg);color:var(--t-dark);border-color:var(--t-pale);">🏕️ Cottages</span>
+            </div>
+            <div class="resort-tip">💡 Request early check-in (5 AM) when booking — most resorts accommodate for groups. Ask for the jungle-view cottage block for group bonding.</div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div class="resort-phone" style="color:var(--t-mid);">📞 +91 4869 224321</div>
+            <div style="font-size:0.75rem;color:var(--mist);margin-top:0.35rem;">Alt: Lake Palace Resort Thekkady · +91 4869 222023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COORG ───────────────────────────────────── -->
+  <div id="panel-coorg" class="dest-panel panel-coorg">
+    <div class="dest-hero">
+      <div class="dest-hero-img" style="background-image: url('https://images.unsplash.com/photo-1591017403286-fd8493524e1e?w=1600')"></div>
+      <div class="dest-hero-overlay"></div>
+      <div class="dest-hero-content">
+        <div class="dest-badge" style="background:#c4700a22; color:#c4700a; border:1px solid #c4700a44;">OPTION B · ⭐ TOP PICK</div>
+        <h2 class="dest-hero-title">Coorg</h2>
+        <p class="dest-hero-sub">Karnataka's coffee country — mist-draped estates, roaring rivers & elephants in the wild.</p>
+        <div class="dest-stats-bar">
+          <div class="dest-stat"><div class="dest-stat-val">26°C</div><div class="dest-stat-label">Temperature</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">~7.5 hrs</div><div class="dest-stat-label">Drive time</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">470 km</div><div class="dest-stat-label">Distance</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">Rs.4,750</div><div class="dest-stat-label">Per person</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">★★★★★</div><div class="dest-stat-label">Adventure</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label reveal">Sights & Activities</div>
+      <h3 class="section-title reveal reveal-delay-1">6 Epic Group Experiences</h3>
+      <p class="section-intro reveal reveal-delay-2">Click any activity to explore it on Google — see real photos, videos & reviews.</p>
+
+      <div class="activities-grid reveal reveal-delay-3">
+        <a class="activity-card" href="https://www.google.com/search?q=Dubare+Elephant+Camp+Coorg+Cauvery" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=600" alt="Dubare Elephants" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🐘</div>
+            <div class="activity-name">Dubare Elephant Camp</div>
+            <div class="activity-desc">Bathe, feed & interact with elephants in River Cauvery</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Barapole+river+rafting+Coorg" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=600" alt="River Rafting" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🚣</div>
+            <div class="activity-name">Barapole River Rafting</div>
+            <div class="activity-desc">Grade 2–3 rapids on Barapole River — perfect for groups</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Coorg+coffee+plantation+estate+tour" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600" alt="Coffee Estate" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">☕</div>
+            <div class="activity-name">Coffee Estate Tour</div>
+            <div class="activity-desc">Walk through aromatic coffee & spice farms, fresh filter coffee</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Abbey+Falls+Coorg+Madikeri" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600" alt="Abbey Falls" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">💧</div>
+            <div class="activity-name">Abbey Falls</div>
+            <div class="activity-desc">Stunning 70-ft waterfall hidden inside lush jungle</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Zipline+adventure+Coorg" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600" alt="Zipline" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🪂</div>
+            <div class="activity-name">Zip-lining & Rappelling</div>
+            <div class="activity-desc">Adventure park with ziplines over coffee estates</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=ATV+quad+biking+Coorg" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600" alt="ATV" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🏍️</div>
+            <div class="activity-name">ATV Rides</div>
+            <div class="activity-desc">Off-road quad biking through coffee plantation trails</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="itinerary-section">
+      <div class="section-label reveal">Full Itinerary</div>
+      <h3 class="section-title reveal reveal-delay-1">Your 2-Day Plan</h3>
+
+      <div class="day-block reveal" style="margin-top:2rem;">
+        <div class="day-title" style="--accent: var(--c-mid);">Friday Night — Departure</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">9:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Board bus from Chennai</div><div class="tl-note">NH44 → NH275 — good highway the whole way.</div></div></div>
+          <div class="tl-row"><div class="tl-time">~1:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Rest stop — Krishnagiri / Hosur</div><div class="tl-note">30 min break, restrooms, snacks.</div></div></div>
+          <div class="tl-row"><div class="tl-time">4:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Arrive Coorg — Check in & Rest</div><div class="tl-note">Early check-in pre-arranged with resort.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--c-mid);">Saturday, Mar 28 — Adventure Day</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast at resort</div><div class="tl-note">South Indian veg spread + fresh filter coffee.</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Dubare Elephant Camp (2 hrs)</div><div class="tl-note">Elephant bathing in Cauvery river — pre-book in advance.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Barapole River Rafting (2 hrs)</div><div class="tl-note">Top group activity — helmets & life vests provided.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Lunch + Resort rest</div><div class="tl-note">Cool off, dry up, relax.</div></div></div>
+          <div class="tl-row"><div class="tl-time">4:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Coffee Estate Guided Walk</div><div class="tl-note">See how your morning filter coffee is born!</div></div></div>
+          <div class="tl-row"><div class="tl-time">6:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Abbey Falls Visit</div><div class="tl-note">Short jungle trek to the falls — golden hour magic.</div></div></div>
+          <div class="tl-row"><div class="tl-time">8:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Bonfire Dinner at Resort</div><div class="tl-note">Veg BBQ, team games, music night, stargazing.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--c-mid);">Sunday, Mar 29 — Thrills & Return</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast + Morning Estate Walk</div><div class="tl-note">Coffee estate at sunrise — truly magical.</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Zip-lining & ATV Rides</div><div class="tl-note">Adventure park — 2 hrs of pure thrills for the whole group.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Talacauvery Viewpoint (optional)</div><div class="tl-note">Source of River Cauvery — scenic & peaceful.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Checkout + Lunch in Madikeri</div><div class="tl-note">Hotel East End or Coorg Cuisine — veg thali.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Local Market + Shopping</div><div class="tl-note">Coorg coffee, spices, home-made chocolate.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Depart for Chennai</div><div class="tl-note">Home by 10:30–11 PM.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="budget-section">
+      <div class="section-label reveal">Budget</div>
+      <h3 class="section-title reveal reveal-delay-1">Detailed Cost Breakdown</h3>
+      <div class="budget-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="budget-header" style="background: var(--c-mid);">
+          <span>Category</span><span>Details</span><span>Total</span><span>Per Person</span>
+        </div>
+        <div class="budget-row"><div><div class="b-cat">Transport</div><div class="b-sub">21-seater AC bus, Chennai–Coorg return</div></div><div class="b-sub">NH44 + NH275 highway</div><div class="b-total">Rs. 26,000</div><div class="b-pp">Rs. 1,300</div></div>
+        <div class="budget-row"><div><div class="b-cat">Accommodation</div><div class="b-sub">Coffee estate resort — 6 rooms × 2 nights</div></div><div class="b-sub">Estate-view cottages</div><div class="b-total">Rs. 42,000</div><div class="b-pp">Rs. 2,100</div></div>
+        <div class="budget-row"><div><div class="b-cat">Food</div><div class="b-sub">All veg — resort meals + town lunch</div></div><div class="b-sub">Sat 3 meals + Sun 2 meals</div><div class="b-total">Rs. 18,000</div><div class="b-pp">Rs. 900</div></div>
+        <div class="budget-row"><div><div class="b-cat">Activities</div><div class="b-sub">Dubare + Rafting + Zipline + ATV</div></div><div class="b-sub">Group rates pre-booked</div><div class="b-total">Rs. 7,500</div><div class="b-pp">Rs. 375</div></div>
+        <div class="budget-row"><div><div class="b-cat">Buffer</div><div class="b-sub">Tips, contingency, shopping</div></div><div class="b-sub">~10% buffer</div><div class="b-total">Rs. 1,500</div><div class="b-pp">Rs. 75</div></div>
+        <div class="budget-row total"><div><div class="b-cat">GRAND TOTAL</div><div class="b-sub" style="color:#ffffffbb;">For 20 people · Within Rs.5,000/person</div></div><div></div><div class="b-total">Rs. 95,000</div><div class="b-pp" style="font-size:1rem;font-weight:800;">Rs. 4,750</div></div>
+      </div>
+    </div>
+
+    <div class="resort-section">
+      <div class="section-label reveal">Where to Stay</div>
+      <h3 class="section-title reveal reveal-delay-1">Recommended Resort</h3>
+      <div class="resort-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="resort-img-wrap">
+          <img class="resort-img" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800" alt="Coorg Resort" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'">
+        </div>
+        <div class="resort-info">
+          <div>
+            <div class="resort-tag">⭐ Top Pick Resort</div>
+            <div class="resort-name">The Tamara Coorg</div>
+            <div class="resort-rating">
+              <span class="stars">★★★★½</span>
+              <span class="rating-text">4.6 · 1,800+ reviews · Madikeri, Coorg</span>
+            </div>
+            <div class="resort-amenities">
+              <span class="amenity-tag" style="background:var(--c-bg);color:var(--c-dark);border-color:var(--c-pale);">🏊 Pool</span>
+              <span class="amenity-tag" style="background:var(--c-bg);color:var(--c-dark);border-color:var(--c-pale);">☕ Coffee Estate</span>
+              <span class="amenity-tag" style="background:var(--c-bg);color:var(--c-dark);border-color:var(--c-pale);">🌿 Spa</span>
+              <span class="amenity-tag" style="background:var(--c-bg);color:var(--c-dark);border-color:var(--c-pale);">🍽️ Veg Restaurant</span>
+              <span class="amenity-tag" style="background:var(--c-bg);color:var(--c-dark);border-color:var(--c-pale);">🔥 Bonfire Lawn</span>
+            </div>
+            <div class="resort-tip">💡 Book estate-view cottages for the group. Ask specifically for bonfire setup Saturday night & packed trail breakfast Sunday morning.</div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div class="resort-phone" style="color:var(--c-mid);">📞 +91 82771 39999</div>
+            <div style="font-size:0.75rem;color:var(--mist);margin-top:0.35rem;">Alt: Evolve Back Kuruba Safari Lodge · +91 80 4628 0000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHIKMAGALUR ──────────────────────────────── -->
+  <div id="panel-chikmagalur" class="dest-panel panel-chik">
+    <div class="dest-hero">
+      <div class="dest-hero-img" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600')"></div>
+      <div class="dest-hero-overlay"></div>
+      <div class="dest-hero-content">
+        <div class="dest-badge" style="background:#3b7dd822; color:#3b7dd8; border:1px solid #3b7dd844;">OPTION C · BEST VALUE</div>
+        <h2 class="dest-hero-title">Chikmagalur</h2>
+        <p class="dest-hero-sub">Karnataka's highest peaks, hidden waterfalls & endless coffee plantations.</p>
+        <div class="dest-stats-bar">
+          <div class="dest-stat"><div class="dest-stat-val">27°C</div><div class="dest-stat-label">Temperature</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">~7 hrs</div><div class="dest-stat-label">Drive time</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">430 km</div><div class="dest-stat-label">Distance</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">Rs.4,500</div><div class="dest-stat-label">Per person</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">★★★★★</div><div class="dest-stat-label">Value</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label reveal">Sights & Activities</div>
+      <h3 class="section-title reveal reveal-delay-1">6 Breathtaking Experiences</h3>
+      <p class="section-intro reveal reveal-delay-2">Click any activity to explore it on Google — see real photos, videos & reviews.</p>
+
+      <div class="activities-grid reveal reveal-delay-3">
+        <a class="activity-card" href="https://www.google.com/search?q=Mullayanagiri+peak+trek+Chikmagalur" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600" alt="Mullayanagiri Trek" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">⛰️</div>
+            <div class="activity-name">Mullayanagiri Trek</div>
+            <div class="activity-desc">Karnataka's highest peak at 1,930m — panoramic sunrise views</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Hebbe+Falls+Chikmagalur+jeep+trek" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=600" alt="Hebbe Falls" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🌊</div>
+            <div class="activity-name">Hebbe Falls</div>
+            <div class="activity-desc">Remote 168-ft twin waterfall — jeep ride + short jungle trek</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Chikmagalur+coffee+plantation+walk" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600" alt="Coffee Plantation" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">☕</div>
+            <div class="activity-name">Coffee Plantation Walk</div>
+            <div class="activity-desc">Guided walk through lush coffee & pepper vines, fresh brew</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Baba+Budangiri+hills+Chikmagalur" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=600" alt="Baba Budangiri" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🌫️</div>
+            <div class="activity-name">Baba Budangiri Hills</div>
+            <div class="activity-desc">Mystical peaks, ancient shrines & misty valley panoramas</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=Z+Point+viewpoint+Chikmagalur+sunset" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="Z Point" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🌅</div>
+            <div class="activity-name">Z-Point Sunset View</div>
+            <div class="activity-desc">Best golden hour viewpoint — the whole valley turns orange</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+
+        <a class="activity-card" href="https://www.google.com/search?q=ATV+zipline+adventure+Chikmagalur" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600" alt="ATV Zipline" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🏍️</div>
+            <div class="activity-name">ATV & Zipline</div>
+            <div class="activity-desc">Quad bikes through estate trails + ziplines over the valley</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="itinerary-section">
+      <div class="section-label reveal">Full Itinerary</div>
+      <h3 class="section-title reveal reveal-delay-1">Your 2-Day Plan</h3>
+
+      <div class="day-block reveal" style="margin-top:2rem;">
+        <div class="day-title" style="--accent: var(--k-mid);">Friday Night — Departure</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">9:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Board bus from Chennai</div><div class="tl-note">NH44 to Bangalore, then NH73 to Chikmagalur.</div></div></div>
+          <div class="tl-row"><div class="tl-time">~1:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Rest stop — Bangalore outskirts</div><div class="tl-note">30 min break, restrooms, snacks.</div></div></div>
+          <div class="tl-row"><div class="tl-time">5:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Arrive Chikmagalur — Check in & Rest</div><div class="tl-note">Early check-in pre-arranged.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--k-mid);">Saturday, Mar 28 — Peaks & Waterfalls</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast + Sunrise from resort</div><div class="tl-note">Most coffee resorts have stunning valley views.</div></div></div>
+          <div class="tl-row"><div class="tl-time">8:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Mullayanagiri Peak Drive & Trek</div><div class="tl-note">1 hr moderate trek — 360° panoramic views at Karnataka's highest point.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Hebbe Falls Jeep Safari + Trek</div><div class="tl-note">Book jeep at resort — 30 min offroad ride, short hike to falls.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Lunch at resort</div><div class="tl-note">Kerala or Karnataka veg thali.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Coffee Plantation Guided Walk</div><div class="tl-note">See coffee flowers, pepper vines, jackfruit, fresh brew at end.</div></div></div>
+          <div class="tl-row"><div class="tl-time">5:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Z-Point Viewpoint — Sunset</div><div class="tl-note">Best spot in Chikmagalur — everyone will want this photo.</div></div></div>
+          <div class="tl-row"><div class="tl-time">7:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Bonfire Dinner + Night Sky Stargazing</div><div class="tl-note">No light pollution at this elevation — milky way visible!</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--k-mid);">Sunday, Mar 29 — Adventure & Return</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast + Morning Nature Walk</div><div class="tl-note">Coffee estate at golden hour.</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">ATV Rides + Zipline</div><div class="tl-note">Adventure park — 2 hrs of full team activity.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Baba Budangiri Hills Drive</div><div class="tl-note">Scenic mountain road — viewpoints all along the way.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Checkout + Lunch in town</div><div class="tl-note">Sri Rama Refreshments or Hotel Mayura — pure veg.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Coffee & Spice Shopping</div><div class="tl-note">Buy fresh estate coffee, spice blends, pepper.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Depart for Chennai</div><div class="tl-note">Home by 10:00–10:30 PM.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="budget-section">
+      <div class="section-label reveal">Budget</div>
+      <h3 class="section-title reveal reveal-delay-1">Detailed Cost Breakdown</h3>
+      <div class="budget-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="budget-header" style="background: var(--k-mid);">
+          <span>Category</span><span>Details</span><span>Total</span><span>Per Person</span>
+        </div>
+        <div class="budget-row"><div><div class="b-cat">Transport</div><div class="b-sub">21-seater AC bus, Chennai–Chikmagalur return</div></div><div class="b-sub">NH44 + NH73 highway</div><div class="b-total">Rs. 24,000</div><div class="b-pp">Rs. 1,200</div></div>
+        <div class="budget-row"><div><div class="b-cat">Accommodation</div><div class="b-sub">Coffee estate stay — 6 rooms × 2 nights</div></div><div class="b-sub">Valley-view rooms</div><div class="b-total">Rs. 40,000</div><div class="b-pp">Rs. 2,000</div></div>
+        <div class="budget-row"><div><div class="b-cat">Food</div><div class="b-sub">All veg — resort meals + town lunch</div></div><div class="b-sub">Sat 3 meals + Sun 2 meals</div><div class="b-total">Rs. 18,000</div><div class="b-pp">Rs. 900</div></div>
+        <div class="budget-row"><div><div class="b-cat">Activities</div><div class="b-sub">Hebbe jeep + ATV + Zipline + misc</div></div><div class="b-sub">Group rates pre-booked</div><div class="b-total">Rs. 5,000</div><div class="b-pp">Rs. 250</div></div>
+        <div class="budget-row"><div><div class="b-cat">Buffer</div><div class="b-sub">Tips, contingency, coffee shopping</div></div><div class="b-sub">~10% buffer</div><div class="b-total">Rs. 3,000</div><div class="b-pp">Rs. 150</div></div>
+        <div class="budget-row total"><div><div class="b-cat">GRAND TOTAL</div><div class="b-sub" style="color:#ffffffbb;">For 20 people · Cheapest of 3 options</div></div><div></div><div class="b-total">Rs. 90,000</div><div class="b-pp" style="font-size:1rem;font-weight:800;">Rs. 4,500</div></div>
+      </div>
+    </div>
+
+    <div class="resort-section">
+      <div class="section-label reveal">Where to Stay</div>
+      <h3 class="section-title reveal reveal-delay-1">Recommended Resort</h3>
+      <div class="resort-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="resort-img-wrap">
+          <img class="resort-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800" alt="Chikmagalur Resort" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'">
+        </div>
+        <div class="resort-info">
+          <div>
+            <div class="resort-tag">Best Value Resort</div>
+            <div class="resort-name">The Serai Chikmagalur</div>
+            <div class="resort-rating">
+              <span class="stars">★★★★½</span>
+              <span class="rating-text">4.4 · 1,200+ reviews · Chikmagalur</span>
+            </div>
+            <div class="resort-amenities">
+              <span class="amenity-tag" style="background:var(--k-bg);color:var(--k-dark);border-color:var(--k-pale);">🏊 Pool</span>
+              <span class="amenity-tag" style="background:var(--k-bg);color:var(--k-dark);border-color:var(--k-pale);">☕ Coffee Estate</span>
+              <span class="amenity-tag" style="background:var(--k-bg);color:var(--k-dark);border-color:var(--k-pale);">🔥 Bonfire</span>
+              <span class="amenity-tag" style="background:var(--k-bg);color:var(--k-dark);border-color:var(--k-pale);">🍽️ Veg Restaurant</span>
+              <span class="amenity-tag" style="background:var(--k-bg);color:var(--k-dark);border-color:var(--k-pale);">🌄 Valley View</span>
+            </div>
+            <div class="resort-tip">💡 Request valley-view rooms for the group. Pre-book the Hebbe Falls jeep & ATV park slots at check-in time — they fill up fast on weekends.</div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div class="resort-phone" style="color:var(--k-mid);">📞 +91 94483 08000</div>
+            <div style="font-size:0.75rem;color:var(--mist);margin-top:0.35rem;">Alt: Destination Chikmagalur · +91 8267 222444</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Compare -->
+<section id="compare">
+  <div class="compare-header">
+    <div class="section-label">Side by Side</div>
+    <h2 class="section-title">Head-to-Head Comparison</h2>
+    <p class="section-intro">Every factor that matters — objectively scored.</p>
+  </div>
+
+  <div class="compare-table-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>🌿 Thekkady</th>
+          <th>☕ Coorg</th>
+          <th>🏔️ Chikmagalur</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Distance</td><td>~490 km</td><td>~470 km</td><td class="winner-cell">~430 km ✓</td></tr>
+        <tr><td>Drive Time</td><td>~8 hrs</td><td>~7.5 hrs</td><td class="winner-cell">~7 hrs ✓</td></tr>
+        <tr><td>Temperature</td><td>27°C</td><td class="winner-cell">26°C ✓</td><td>27°C</td></tr>
+        <tr><td>Rain Risk</td><td>15–20%</td><td class="winner-cell">5–10% ✓</td><td class="winner-cell">5–10% ✓</td></tr>
+        <tr class="highlight"><td>Unique Experience</td><td>Wildlife + Culture</td><td>Elephants + Rafting</td><td>Trekking + Peaks</td></tr>
+        <tr><td>Best Single Activity</td><td>Bamboo Rafting</td><td class="winner-cell">Dubare Elephants ✓</td><td>Mullayanagiri Trek</td></tr>
+        <tr><td>Water Activity</td><td>Boat + Bamboo raft</td><td class="winner-cell">River Rafting ✓</td><td>Hebbe Falls hike</td></tr>
+        <tr><td>Adventure Factor</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td></tr>
+        <tr><td>Cultural Experience</td><td class="winner-cell">★★★★★ ✓</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
+        <tr><td>Nature & Wildlife</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td><td>★★★★☆</td></tr>
+        <tr><td>Group Activities</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td></tr>
+        <tr><td>Resort Quality</td><td>High</td><td class="winner-cell">Highest ✓</td><td>High</td></tr>
+        <tr><td>Road Type</td><td>Highway OK</td><td class="winner-cell">Smooth highway ✓</td><td class="winner-cell">Smooth highway ✓</td></tr>
+        <tr><td>Stargazing</td><td>Good</td><td>Good</td><td class="winner-cell">Best (high altitude) ✓</td></tr>
+        <tr><td>Shopping</td><td>Spices + cardamom</td><td>Coffee + chocolate</td><td class="winner-cell">Coffee + spices ✓</td></tr>
+        <tr><td>Transport Cost</td><td>Rs.1,400/pp</td><td>Rs.1,300/pp</td><td class="winner-cell">Rs.1,200/pp ✓</td></tr>
+        <tr class="total-row highlight"><td>Total Budget</td><td>Rs.4,800/pp</td><td>Rs.4,750/pp</td><td class="winner-cell">Rs.4,500/pp ✓</td></tr>
+        <tr class="total-row highlight"><td>🏆 Overall Score</td><td>5 wins</td><td class="winner-cell" style="font-size:1.1rem;">7 wins 🏆</td><td>6 wins</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="winner-cards">
+    <div class="winner-card" style="--card-glow: #2d9e6315;">
+      <div class="winner-badge">🌿</div>
+      <div class="winner-dest">Thekkady</div>
+      <div class="winner-tagline">Best for Culture & Wildlife</div>
+      <div class="winner-desc">No other destination in South India packs wildlife, ancient performing arts & jungle adventure into one weekend. Kathakali + bamboo rafting is a combo you'll never forget.</div>
+    </div>
+    <div class="winner-card featured" style="--card-glow: #2d9e6330;">
+      <div class="winner-badge">☕ ⭐</div>
+      <div class="winner-dest">Coorg</div>
+      <div class="winner-tagline">Top Pick — Best Overall</div>
+      <div class="winner-desc">Wins 7/18 categories. Dubare elephant camp + river rafting + coffee estates + zipline = the most variety any destination offers. Coolest temperature at 26°C, best resorts.</div>
+    </div>
+    <div class="winner-card" style="--card-glow: #3b7dd815;">
+      <div class="winner-badge">🏔️</div>
+      <div class="winner-dest">Chikmagalur</div>
+      <div class="winner-tagline">Best Value for Money</div>
+      <div class="winner-desc">Cheapest at Rs.4,500/pp. Closest at ~7 hrs. Mullayanagiri is a bucket-list trek and the stargazing at this altitude is unreal. Perfect if the team is budget-conscious.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Vote -->
+<section id="vote">
+  <div class="section-label">Your turn</div>
+  <h2 class="section-title">Cast Your Vote</h2>
+  <p class="section-intro">Team decision time. Pick your destination and we'll plan the rest!</p>
+
+  <div class="vote-options">
+    <button class="vote-btn thekkady" onclick="castVote(this, 'Thekkady', '🌿', 'Wildlife, spice & culture — a Kerala original')">
+      <div class="vote-emoji">🌿</div>
+      <div class="vote-name">Thekkady</div>
+      <div class="vote-sub">Wildlife · Culture · Spice</div>
+      <div class="vote-budget" style="color:var(--t-mid);">Rs. 4,800/person</div>
+    </button>
+    <button class="vote-btn coorg" onclick="castVote(this, 'Coorg', '☕', 'Most activities, best resort, coolest weather')">
+      <div class="vote-emoji">☕</div>
+      <div class="vote-name">Coorg ⭐</div>
+      <div class="vote-sub">Adventure · Coffee · Elephants</div>
+      <div class="vote-budget" style="color:var(--c-mid);">Rs. 4,750/person</div>
+    </button>
+    <button class="vote-btn chik" onclick="castVote(this, 'Chikmagalur', '🏔️', 'Best value, closest, Karnataka\'s highest peak')">
+      <div class="vote-emoji">🏔️</div>
+      <div class="vote-name">Chikmagalur</div>
+      <div class="vote-sub">Peaks · Waterfalls · Trails</div>
+      <div class="vote-budget" style="color:var(--k-mid);">Rs. 4,500/person</div>
+    </button>
+  </div>
+
+  <div class="vote-result" id="vote-result">
+    <div id="vote-result-emoji" style="font-size:2.5rem;margin-bottom:0.75rem;"></div>
+    <div class="vote-result-title" id="vote-result-title"></div>
+    <div class="vote-result-sub" id="vote-result-sub"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">Team Outing '26 🗺️</div>
+  <div class="footer-right">Chennai · Mar 28–29 · 20 People · Pure Veg</div>
+</footer>
+
+<script>
+// Custom cursor
+const ring = document.getElementById('cursor-ring');
+const dot = document.getElementById('cursor-dot');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+});
+
+function animCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('a, button, .activity-card, .vote-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Panel switching
+function switchPanel(name, btn) {
+  document.querySelectorAll('.dest-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dest-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+  // Scroll to destinations
+  document.getElementById('destinations').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Vote
+function castVote(btn, name, emoji, reason) {
+  document.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const result = document.getElementById('vote-result');
+  document.getElementById('vote-result-emoji').textContent = emoji;
+  document.getElementById('vote-result-title').textContent = name + ' it is!';
+  document.getElementById('vote-result-sub').textContent = reason + ' — Share this page with your team and let everyone vote!';
+  result.classList.add('show');
+  result.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// Parallax on hero
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  const heroImg = document.querySelector('.hero-img');
+  if (heroImg) heroImg.style.transform = `translateY(${s * 0.3}px)`;
+});
+
+// Staggered card entry animation
+document.querySelectorAll('.activity-card').forEach((card, i) => {
+  card.style.animationDelay = (i * 0.08) + 's';
+});
+</script>
+</body>
+</html>
