@@ -11,6 +11,7 @@
   --t-dark: #0d2b1e; --t-mid: #1a5c3a; --t-lit: #2d9e63; --t-pale: #d4f5e2; --t-bg: #f0fdf6;
   --c-dark: #3b1a00; --c-mid: #7c3d0a; --c-lit: #c4700a; --c-pale: #fef3d4; --c-bg: #fffbf0;
   --k-dark: #0f1f40; --k-mid: #1e4080; --k-lit: #3b7dd8; --k-pale: #dbeafe; --k-bg: #f0f6ff;
+  --y-dark: #3d1f00; --y-mid: #b34a00; --y-lit: #f97316; --y-pale: #ffedd5; --y-bg: #fff7ed;
   --ink: #0a0a0a; --mist: #6b7280; --bone: #f9f7f4; --paper: #ffffff;
   --ease: cubic-bezier(0.16,1,0.3,1);
 }
@@ -633,6 +634,7 @@ body::before {
 .vote-btn.thekkady { --btn-accent: var(--t-lit); --btn-glow: #2d9e6322; }
 .vote-btn.coorg    { --btn-accent: var(--c-lit); --btn-glow: #c4700a22; }
 .vote-btn.chik     { --btn-accent: var(--k-lit); --btn-glow: #3b7dd822; }
+.vote-btn.yelagiri { --btn-accent: var(--y-lit); --btn-glow: #f9731622; }
 
 .vote-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
 .vote-name {
@@ -681,6 +683,10 @@ footer {
 .panel-chik {
   --accent: var(--k-mid); --accent-pale: var(--k-bg);
   --accent-dark: var(--k-dark); --accent-border: var(--k-pale);
+}
+.panel-yelagiri {
+  --accent: var(--y-mid); --accent-pale: var(--y-bg);
+  --accent-dark: var(--y-dark); --accent-border: var(--y-pale);
 }
 
 /* ── Scroll animations ─────────────────────────────────── */
@@ -735,22 +741,23 @@ footer {
   <div id="hero-bg"></div>
   <div class="hero-img"></div>
   <div id="hero-content">
-    <div class="hero-eyebrow">Team Outing 2026 · Mar 28–29 · 20 People</div>
+    <div class="hero-eyebrow">Team Outing 2026 · Mar 28–29 · 21 People</div>
     <h1 class="hero-title">
       Choose Your
       <em>Adventure.</em>
     </h1>
-    <p class="hero-sub">Three incredible destinations. One unforgettable weekend. Pure veg, pure vibes, pure memories.</p>
+    <p class="hero-sub">Four incredible destinations. One unforgettable weekend. Pure veg, pure vibes, pure memories.</p>
     <div class="hero-pills">
       <span class="pill">🌿 Thekkady — Wildlife & Culture</span>
       <span class="pill">☕ Coorg — Coffee & Adventure</span>
       <span class="pill">🏔️ Chikmagalur — Peaks & Trails</span>
+      <span class="pill">🪂 Yelagiri — Offbeat & Close</span>
     </div>
     <div class="hero-pills">
-      <span class="pill">Rs.5,000 budget</span>
+      <span class="pill">₹80k company budget</span>
       <span class="pill">21-seater AC bus</span>
       <span class="pill">Veg only</span>
-      <span class="pill">~7–8 hrs from Chennai</span>
+      <span class="pill">Leave Fri night · Back Sun eve</span>
     </div>
   </div>
   <div class="hero-scroll">Scroll to explore</div>
@@ -770,6 +777,10 @@ footer {
     <button class="dest-tab" data-panel="chikmagalur" style="--accent: var(--k-lit);" onclick="switchPanel('chikmagalur', this)">
       <span class="dest-tab-label">Chikmagalur</span>
       <span class="dest-tab-meta">Karnataka · 430 km</span>
+    </button>
+    <button class="dest-tab" data-panel="yelagiri" style="--accent: var(--y-lit);" onclick="switchPanel('yelagiri', this)">
+      <span class="dest-tab-label">Yelagiri ✦</span>
+      <span class="dest-tab-meta">Tamil Nadu · 230 km</span>
     </button>
   </div>
 
@@ -1301,6 +1312,191 @@ footer {
       </div>
     </div>
   </div>
+
+  <!-- ── YELAGIRI ────────────────────────────────── -->
+  <div id="panel-yelagiri" class="dest-panel panel-yelagiri">
+    <div class="dest-hero">
+      <div class="dest-hero-img" style="background-image: url('https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=1600')"></div>
+      <div class="dest-hero-overlay"></div>
+      <div class="dest-hero-content">
+        <div class="dest-badge" style="background:#f9731622; color:#f97316; border:1px solid #f9731644;">OPTION D · ✦ OFFBEAT PICK</div>
+        <h2 class="dest-hero-title">Yelagiri</h2>
+        <p class="dest-hero-sub">Tamil Nadu's best-kept secret — paragliding, tribal hills, and home by 4 PM Sunday.</p>
+        <div class="dest-stats-bar">
+          <div class="dest-stat"><div class="dest-stat-val">28–30°C</div><div class="dest-stat-label">Temperature</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">~4.5 hrs</div><div class="dest-stat-label">Drive time</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">230 km</div><div class="dest-stat-label">Distance</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">Rs.3,800</div><div class="dest-stat-label">Per person</div></div>
+          <div class="dest-stat"><div class="dest-stat-val">★★★★★</div><div class="dest-stat-label">Offbeat</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label reveal">Sights & Activities</div>
+      <h3 class="section-title reveal reveal-delay-1">6 Experiences Nobody Expects</h3>
+      <p class="section-intro reveal reveal-delay-2">Click any activity to explore it on Google — see real photos, videos & reviews.</p>
+
+      <div class="activities-grid reveal reveal-delay-3">
+        <a class="activity-card" href="https://www.google.com/search?q=Paragliding+Yelagiri+Hills+Tamil+Nadu" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=600" alt="Paragliding" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🪂</div>
+            <div class="activity-name">Paragliding</div>
+            <div class="activity-desc">One of the few licensed paragliding spots in Tamil Nadu — fly over the entire valley</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+        <a class="activity-card" href="https://www.google.com/search?q=Jawadhu+Hills+tribal+village+offbeat+Tamil+Nadu" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600" alt="Jawadhu Hills" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🏕️</div>
+            <div class="activity-name">Jawadhu Hills — Tribal Plateau</div>
+            <div class="activity-desc">30 km away — Malaiyali tribal villages, honey harvesting, zero tourists</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+        <a class="activity-card" href="https://www.google.com/search?q=Punganoor+Lake+boating+Yelagiri" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600" alt="Punganoor Lake" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🚣</div>
+            <div class="activity-name">Punganoor Lake Boating</div>
+            <div class="activity-desc">Scenic hilltop lake — pedal boats, rowing, misty morning views</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+        <a class="activity-card" href="https://www.google.com/search?q=Swamimalai+Hills+trek+Yelagiri" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600" alt="Swamimalai Trek" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🥾</div>
+            <div class="activity-name">Swamimalai Hills Trek</div>
+            <div class="activity-desc">Easy-moderate sunrise trek — panoramic Eastern Ghats views</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+        <a class="activity-card" href="https://www.google.com/search?q=Jalagamparai+Waterfalls+Yelagiri" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=600" alt="Jalagamparai Falls" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">💧</div>
+            <div class="activity-name">Jalagamparai Waterfalls</div>
+            <div class="activity-desc">Hidden waterfall — 3 km cool forest trail, worth every step</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+        <a class="activity-card" href="https://www.google.com/search?q=rock+climbing+rappelling+Yelagiri+hills" target="_blank">
+          <img class="activity-img" src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=600" alt="Rock Climbing" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="activity-overlay">
+            <div class="activity-icon">🧗</div>
+            <div class="activity-name">Rock Climbing & Rappelling</div>
+            <div class="activity-desc">Natural rock faces — beginner friendly, great for a team</div>
+          </div>
+          <div class="activity-cta">EXPLORE →</div>
+        </a>
+      </div>
+
+      <div style="margin-top:2.5rem; padding:1.75rem 2rem; background:linear-gradient(135deg,#fff7ed,#ffedd5); border-radius:20px; border:1px solid #fed7aa; display:flex; gap:1.5rem; align-items:flex-start;" class="reveal">
+        <div style="font-size:2rem; flex-shrink:0;">✦</div>
+        <div>
+          <div style="font-weight:700; font-size:1rem; color:#b34a00; margin-bottom:0.4rem;">The Jawadhu Hills Twist — Nobody Else Does This</div>
+          <div style="font-size:0.85rem; color:#7c3d0a; line-height:1.7;">Jawadhu Hills is a tribal plateau 30 km from Yelagiri that almost no tourists visit. The Malaiyali community practices traditional honey harvesting and the plateau views over the Eastern Ghats are extraordinary. On Sunday post-checkout, drive up to Jawadhu instead of going straight home — you'll be back in Chennai by 3–4 PM and you'll have a story nobody else has told on Monday.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="itinerary-section">
+      <div class="section-label reveal">Full Itinerary</div>
+      <h3 class="section-title reveal reveal-delay-1">Your 2-Day Plan</h3>
+
+      <div class="day-block reveal" style="margin-top:2rem;">
+        <div class="day-title" style="--accent: var(--y-mid);">Friday Night — The Easy Departure</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">11:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Board 21-seater AC bus from Chennai</div><div class="tl-note">NH48 toward Vellore then Vaniyambadi. Smoothest highway of all 4 options — no ghats at all.</div></div></div>
+          <div class="tl-row"><div class="tl-time">~1:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Optional chai stop — Vaniyambadi</div><div class="tl-note">15 min break, restrooms, tea. Famous town, plenty of 24hr stops.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Arrive Yelagiri — Check in & Sleep</div><div class="tl-note">Everyone in actual beds by 4 AM. No 8-hour bus ordeal. This alone is a win over every other option.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--y-mid);">Saturday, Mar 28 — Full Activity Day</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">8:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast at resort</div><div class="tl-note">South Indian veg — idli, dosa, pongal, filter coffee. Hilltop morning air.</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Swamimalai Hills Sunrise Trek</div><div class="tl-note">1.5 hr moderate hike. Panoramic views — the whole team gets a photo nobody from Chennai has.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Paragliding — Yelagiri Launch Site</div><div class="tl-note">Pre-book Nilagiris Adventure Club. ₹1,500–2,000/person. Tandem flights. Everyone cheers each other's flight. Pregnant colleague watches from the viewpoint — it's a stunning spot.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Lunch at resort</div><div class="tl-note">Pure veg thali or buffet.</div></div></div>
+          <div class="tl-row"><div class="tl-time">3:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Punganoor Lake — Boating + Walk</div><div class="tl-note">Hilltop lake, pedal boats and row boats. Easy and fun for the full group.</div></div></div>
+          <div class="tl-row"><div class="tl-time">4:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Rock Climbing & Rappelling</div><div class="tl-note">Local certified instructors, gear provided. Natural rock faces — absolute beginners welcome.</div></div></div>
+          <div class="tl-row"><div class="tl-time">7:00 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Pool + Free time at resort</div><div class="tl-note">Tired, happy, post-activity chill.</div></div></div>
+          <div class="tl-row"><div class="tl-time">8:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Bonfire Dinner + Team Night</div><div class="tl-note">Music, indoor games, stargazing. Yelagiri at 1,100m — minimal light pollution.</div></div></div>
+        </div>
+      </div>
+
+      <div class="day-block reveal">
+        <div class="day-title" style="--accent: var(--y-mid);">Sunday, Mar 29 — Jawadhu Twist + Early Return</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-time">7:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Breakfast + Nature Park walk</div><div class="tl-note">Yelagiri Nature Park morning loop — 45 min, flat, cool, beautiful.</div></div></div>
+          <div class="tl-row"><div class="tl-time">9:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Jalagamparai Waterfalls hike</div><div class="tl-note">3 km forest trail — cool and shaded, perfect Sunday morning.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:00 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Checkout</div><div class="tl-note">Pack up, group photo, settle bills.</div></div></div>
+          <div class="tl-row"><div class="tl-time">11:30 AM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">★ Drive to Jawadhu Hills — The Offbeat Detour</div><div class="tl-note">30 km from Yelagiri. Malaiyali tribal plateau, honey villages, Eastern Ghats panorama. Zero tourists. Maximum Monday story value.</div></div></div>
+          <div class="tl-row"><div class="tl-time">1:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Lunch — Tirupattur or Ambur</div><div class="tl-note">Ambur is Tamil Nadu-famous for biryani. Veg options available. OR carry packed lunch from resort.</div></div></div>
+          <div class="tl-row"><div class="tl-time">2:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">Depart for Chennai</div><div class="tl-note">NH48 — straight, fast, no ghats. Pure highway.</div></div></div>
+          <div class="tl-row"><div class="tl-time">4:30 PM</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-act">🏠 Reach Chennai — before sunset</div><div class="tl-note">Full Sunday evening free. Monday morning = zero suffering. No other destination gives you this.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="budget-section">
+      <div class="section-label reveal">Budget</div>
+      <h3 class="section-title reveal reveal-delay-1">Detailed Cost Breakdown</h3>
+      <div class="budget-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="budget-header" style="background: var(--y-mid);">
+          <span>Category</span><span>Details</span><span>Total</span><span>Per Person</span>
+        </div>
+        <div class="budget-row"><div><div class="b-cat">Transport</div><div class="b-sub">21-seater AC bus, Chennai–Yelagiri return</div></div><div class="b-sub">NH48 — no ghats, smooth highway</div><div class="b-total">Rs. 14,000</div><div class="b-pp">Rs. 667</div></div>
+        <div class="budget-row"><div><div class="b-cat">Accommodation</div><div class="b-sub">Sterling Yelagiri — 7 rooms, 1 night, triple sharing</div></div><div class="b-sub">Pool, restaurant, hill views</div><div class="b-total">Rs. 42,000</div><div class="b-pp">Rs. 2,000</div></div>
+        <div class="budget-row"><div><div class="b-cat">Food</div><div class="b-sub">All veg — resort meals + Sunday lunch in town</div></div><div class="b-sub">Sat 3 meals + Sun 2 meals</div><div class="b-total">Rs. 10,000</div><div class="b-pp">Rs. 476</div></div>
+        <div class="budget-row"><div><div class="b-cat">Paragliding</div><div class="b-sub">Tandem flights · ₹1,800 × 21 people</div></div><div class="b-sub">Pre-book Nilagiris Adventure Club</div><div class="b-total">Rs. 37,800</div><div class="b-pp">Rs. 1,800</div></div>
+        <div class="budget-row"><div><div class="b-cat">Other Activities</div><div class="b-sub">Rock climbing + rappelling + boating + trek</div></div><div class="b-sub">Group rates, local operators</div><div class="b-total">Rs. 5,000</div><div class="b-pp">Rs. 238</div></div>
+        <div class="budget-row"><div><div class="b-cat">Buffer</div><div class="b-sub">Tips, Jawadhu entry, misc</div></div><div class="b-sub">~10% buffer</div><div class="b-total">Rs. 3,000</div><div class="b-pp">Rs. 143</div></div>
+        <div class="budget-row total"><div><div class="b-cat">GRAND TOTAL</div><div class="b-sub" style="color:#ffffffbb;">21 people · Fits within ₹80k company budget — zero top-up!</div></div><div></div><div class="b-total">Rs. 79,800</div><div class="b-pp" style="font-size:1rem;font-weight:800;">Rs. 3,800</div></div>
+      </div>
+      <div style="margin-top:1rem;padding:1rem 1.25rem;background:var(--y-bg);border-radius:12px;border:1px solid var(--y-pale);font-size:0.82rem;color:var(--y-dark);">
+        💡 <strong>Without paragliding:</strong> Total drops to ~Rs.42,000 (Rs.2,000/person). Paragliding is per-person optional — non-flyers watch from the viewpoint for free.
+      </div>
+    </div>
+
+    <div class="resort-section">
+      <div class="section-label reveal">Where to Stay</div>
+      <h3 class="section-title reveal reveal-delay-1">Recommended Resort</h3>
+      <div class="resort-card reveal reveal-delay-2" style="margin-top:1.5rem;">
+        <div class="resort-img-wrap">
+          <img class="resort-img" src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800" alt="Sterling Yelagiri" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'">
+        </div>
+        <div class="resort-info">
+          <div>
+            <div class="resort-tag">✦ Offbeat Pick Resort</div>
+            <div class="resort-name">Sterling Yelagiri</div>
+            <div class="resort-rating">
+              <span class="stars">★★★★☆</span>
+              <span class="rating-text">4.1 · 900+ reviews · Yelagiri Hills, Tamil Nadu</span>
+            </div>
+            <div class="resort-amenities">
+              <span class="amenity-tag" style="background:var(--y-bg);color:var(--y-dark);border-color:var(--y-pale);">🏊 Pool</span>
+              <span class="amenity-tag" style="background:var(--y-bg);color:var(--y-dark);border-color:var(--y-pale);">🍽️ Veg Restaurant</span>
+              <span class="amenity-tag" style="background:var(--y-bg);color:var(--y-dark);border-color:var(--y-pale);">🔥 Bonfire Lawn</span>
+              <span class="amenity-tag" style="background:var(--y-bg);color:var(--y-dark);border-color:var(--y-pale);">🌄 Hill Views</span>
+              <span class="amenity-tag" style="background:var(--y-bg);color:var(--y-dark);border-color:var(--y-pale);">🎮 Indoor Games</span>
+            </div>
+            <div class="resort-tip" style="border-left-color:var(--y-mid);background:var(--y-bg);">💡 Book the cottages section — better hill views, closer to the bonfire lawn. Mention 3:30 AM early arrival when calling — Sterling regularly handles large group late-night check-ins.</div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <div class="resort-phone" style="color:var(--y-mid);">📞 +91 4179 245222</div>
+            <div style="font-size:0.75rem;color:var(--mist);margin-top:0.35rem;">Alt: MGM Whispering Winds Yelagiri · +91 4179 245500</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- Compare -->
@@ -1319,49 +1515,56 @@ footer {
           <th>🌿 Thekkady</th>
           <th>☕ Coorg</th>
           <th>🏔️ Chikmagalur</th>
+          <th>🪂 Yelagiri</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Distance</td><td>~490 km</td><td>~470 km</td><td class="winner-cell">~430 km ✓</td></tr>
-        <tr><td>Drive Time</td><td>~8 hrs</td><td>~7.5 hrs</td><td class="winner-cell">~7 hrs ✓</td></tr>
-        <tr><td>Temperature</td><td>27°C</td><td class="winner-cell">26°C ✓</td><td>27°C</td></tr>
-        <tr><td>Rain Risk</td><td>15–20%</td><td class="winner-cell">5–10% ✓</td><td class="winner-cell">5–10% ✓</td></tr>
-        <tr class="highlight"><td>Unique Experience</td><td>Wildlife + Culture</td><td>Elephants + Rafting</td><td>Trekking + Peaks</td></tr>
-        <tr><td>Best Single Activity</td><td>Bamboo Rafting</td><td class="winner-cell">Dubare Elephants ✓</td><td>Mullayanagiri Trek</td></tr>
-        <tr><td>Water Activity</td><td>Boat + Bamboo raft</td><td class="winner-cell">River Rafting ✓</td><td>Hebbe Falls hike</td></tr>
-        <tr><td>Adventure Factor</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td></tr>
-        <tr><td>Cultural Experience</td><td class="winner-cell">★★★★★ ✓</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
-        <tr><td>Nature & Wildlife</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td><td>★★★★☆</td></tr>
-        <tr><td>Group Activities</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td></tr>
-        <tr><td>Resort Quality</td><td>High</td><td class="winner-cell">Highest ✓</td><td>High</td></tr>
-        <tr><td>Road Type</td><td>Highway OK</td><td class="winner-cell">Smooth highway ✓</td><td class="winner-cell">Smooth highway ✓</td></tr>
-        <tr><td>Stargazing</td><td>Good</td><td>Good</td><td class="winner-cell">Best (high altitude) ✓</td></tr>
-        <tr><td>Shopping</td><td>Spices + cardamom</td><td>Coffee + chocolate</td><td class="winner-cell">Coffee + spices ✓</td></tr>
-        <tr><td>Transport Cost</td><td>Rs.1,400/pp</td><td>Rs.1,300/pp</td><td class="winner-cell">Rs.1,200/pp ✓</td></tr>
-        <tr class="total-row highlight"><td>Total Budget</td><td>Rs.4,800/pp</td><td>Rs.4,750/pp</td><td class="winner-cell">Rs.4,500/pp ✓</td></tr>
-        <tr class="total-row highlight"><td>🏆 Overall Score</td><td>5 wins</td><td class="winner-cell" style="font-size:1.1rem;">7 wins 🏆</td><td>6 wins</td></tr>
+        <tr><td>Distance</td><td>~490 km</td><td>~470 km</td><td>~430 km</td><td class="winner-cell">~230 km ✓</td></tr>
+        <tr><td>Drive Time</td><td>~8 hrs</td><td>~7.5 hrs</td><td>~7 hrs</td><td class="winner-cell">~4.5 hrs ✓</td></tr>
+        <tr><td>Temperature</td><td>27°C</td><td class="winner-cell">26°C ✓</td><td>27°C</td><td>28–30°C</td></tr>
+        <tr><td>Rain Risk</td><td>15–20%</td><td class="winner-cell">5–10% ✓</td><td class="winner-cell">5–10% ✓</td><td class="winner-cell">5% ✓</td></tr>
+        <tr class="highlight"><td>Unique Experience</td><td>Wildlife + Culture</td><td>Elephants + Rafting</td><td>Trekking + Peaks</td><td class="winner-cell">Paragliding + Tribal ✓</td></tr>
+        <tr><td>Best Single Activity</td><td>Bamboo Rafting</td><td class="winner-cell">Dubare Elephants ✓</td><td>Mullayanagiri Trek</td><td>Paragliding</td></tr>
+        <tr><td>Water Activity</td><td>Boat + Bamboo raft</td><td class="winner-cell">River Rafting ✓</td><td>Hebbe Falls hike</td><td>Lake Boating</td></tr>
+        <tr><td>Adventure Factor</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td><td>★★★★☆</td></tr>
+        <tr><td>Cultural Experience</td><td class="winner-cell">★★★★★ ✓</td><td>★★★☆☆</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
+        <tr><td>Offbeat Factor</td><td>★★★☆☆</td><td>★★★☆☆</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td></tr>
+        <tr><td>Group Activities</td><td>★★★★☆</td><td class="winner-cell">★★★★★ ✓</td><td>★★★★☆</td><td>★★★★☆</td></tr>
+        <tr><td>Pregnant-Friendly</td><td>★★★☆☆</td><td>★★★☆☆</td><td>★★★☆☆</td><td class="winner-cell">★★★★★ ✓</td></tr>
+        <tr><td>Road Quality</td><td>Highway OK</td><td class="winner-cell">Smooth ✓</td><td class="winner-cell">Smooth ✓</td><td class="winner-cell">Pure highway ✓</td></tr>
+        <tr><td>Sunday Return Time</td><td>~11 PM</td><td>~11 PM</td><td>~10 PM</td><td class="winner-cell">4:30 PM ✓</td></tr>
+        <tr><td>Stargazing</td><td>Good</td><td>Good</td><td class="winner-cell">Best ✓</td><td>Good</td></tr>
+        <tr><td>Transport Cost</td><td>Rs.1,400/pp</td><td>Rs.1,300/pp</td><td>Rs.1,200/pp</td><td class="winner-cell">Rs.667/pp ✓</td></tr>
+        <tr class="total-row highlight"><td>Total Budget</td><td>Rs.4,800/pp</td><td>Rs.4,750/pp</td><td>Rs.4,500/pp</td><td class="winner-cell">Rs.3,800/pp ✓</td></tr>
+        <tr class="total-row highlight"><td>🏆 Overall Score</td><td>4 wins</td><td class="winner-cell" style="font-size:1.1rem;">5 wins 🏆</td><td>4 wins</td><td class="winner-cell" style="font-size:1.1rem;">7 wins ✦</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="winner-cards">
+  <div class="winner-cards" style="grid-template-columns: repeat(4,1fr);">
     <div class="winner-card" style="--card-glow: #2d9e6315;">
       <div class="winner-badge">🌿</div>
       <div class="winner-dest">Thekkady</div>
       <div class="winner-tagline">Best for Culture & Wildlife</div>
-      <div class="winner-desc">No other destination in South India packs wildlife, ancient performing arts & jungle adventure into one weekend. Kathakali + bamboo rafting is a combo you'll never forget.</div>
+      <div class="winner-desc">Kathakali + bamboo rafting + spice plantations. The most culturally rich destination. For teams that want a story rooted in nature and heritage.</div>
     </div>
-    <div class="winner-card featured" style="--card-glow: #2d9e6330;">
+    <div class="winner-card featured" style="--card-glow: #c4700a30;">
       <div class="winner-badge">☕ ⭐</div>
       <div class="winner-dest">Coorg</div>
-      <div class="winner-tagline">Top Pick — Best Overall</div>
-      <div class="winner-desc">Wins 7/18 categories. Dubare elephant camp + river rafting + coffee estates + zipline = the most variety any destination offers. Coolest temperature at 26°C, best resorts.</div>
+      <div class="winner-tagline">Best Overall Experience</div>
+      <div class="winner-desc">Dubare elephants + river rafting + coffee estates + zipline. Most variety, coolest temp, best resorts. The answer if experience is priority over budget.</div>
     </div>
     <div class="winner-card" style="--card-glow: #3b7dd815;">
       <div class="winner-badge">🏔️</div>
       <div class="winner-dest">Chikmagalur</div>
-      <div class="winner-tagline">Best Value for Money</div>
-      <div class="winner-desc">Cheapest at Rs.4,500/pp. Closest at ~7 hrs. Mullayanagiri is a bucket-list trek and the stargazing at this altitude is unreal. Perfect if the team is budget-conscious.</div>
+      <div class="winner-tagline">Best Scenery & Trekking</div>
+      <div class="winner-desc">Mullayanagiri + Hebbe Falls + coffee estates + stargazing. Karnataka's most photogenic destination. Choose this for the wow factor.</div>
+    </div>
+    <div class="winner-card" style="--card-glow: #f9731625; border-color:#f9731633;">
+      <div class="winner-badge">🪂 ✦</div>
+      <div class="winner-dest">Yelagiri</div>
+      <div class="winner-tagline">Most Wins · Offbeat Champion</div>
+      <div class="winner-desc">Closest, cheapest, home by 4:30 PM Sunday. Paragliding + Jawadhu tribal hills = the best Monday morning story. The only option that fits ₹80k with zero top-up.</div>
     </div>
   </div>
 </section>
@@ -1372,7 +1575,7 @@ footer {
   <h2 class="section-title">Cast Your Vote</h2>
   <p class="section-intro">Team decision time. Pick your destination and we'll plan the rest!</p>
 
-  <div class="vote-options">
+  <div class="vote-options" style="max-width:1000px;">
     <button class="vote-btn thekkady" onclick="castVote(this, 'Thekkady', '🌿', 'Wildlife, spice & culture — a Kerala original')">
       <div class="vote-emoji">🌿</div>
       <div class="vote-name">Thekkady</div>
@@ -1385,11 +1588,17 @@ footer {
       <div class="vote-sub">Adventure · Coffee · Elephants</div>
       <div class="vote-budget" style="color:var(--c-mid);">Rs. 4,750/person</div>
     </button>
-    <button class="vote-btn chik" onclick="castVote(this, 'Chikmagalur', '🏔️', 'Best value, closest, Karnataka\'s highest peak')">
+    <button class="vote-btn chik" onclick="castVote(this, 'Chikmagalur', '🏔️', 'Best scenery, closest Karnataka option')">
       <div class="vote-emoji">🏔️</div>
       <div class="vote-name">Chikmagalur</div>
       <div class="vote-sub">Peaks · Waterfalls · Trails</div>
       <div class="vote-budget" style="color:var(--k-mid);">Rs. 4,500/person</div>
+    </button>
+    <button class="vote-btn yelagiri" onclick="castVote(this, 'Yelagiri', '🪂', 'Closest, cheapest, home by 4:30 PM — paragliding + tribal hills')">
+      <div class="vote-emoji">🪂</div>
+      <div class="vote-name">Yelagiri ✦</div>
+      <div class="vote-sub">Offbeat · Paragliding · Tribal</div>
+      <div class="vote-budget" style="color:var(--y-mid);">Rs. 3,800/person</div>
     </button>
   </div>
 
